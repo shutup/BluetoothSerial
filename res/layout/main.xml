@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg">
+    <LinearLayout 
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="30dp"
+     >
+	  <TextView android:id="@+id/title_left_text"
+	      android:ellipsize="end"
+	      android:singleLine="true"
+	      style="?android:attr/windowTitleStyle"
+	      android:layout_width="wrap_content"
+	      android:layout_height="match_parent"
+	      android:layout_weight="1" />
+	    <TextView android:id="@+id/title_right_text"
+	        android:ellipsize="end"
+	        android:singleLine="true"
+	        android:layout_width="wrap_content"
+	        android:layout_height="match_parent"
+	        android:textColor="#fff"
+	        android:layout_weight="1" 
+	    />
+	</LinearLayout>
+
+    <ListView android:id="@+id/in"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:stackFromBottom="true"
+        android:transcriptMode="alwaysScroll"
+        android:layout_weight="1"
+    />
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#cccccc">
+        <EditText 
+            android:id="@+id/edit_text_out"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:textSize="22sp"
+            android:layout_gravity="bottom"
+            android:text="hello"
+            android:textColor="#000000"
+            android:paddingLeft="5dp"
+        	android:background="#ffffff"/>
+        <Button android:id="@+id/button_send"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/send"
+        />
+    </LinearLayout>
+</LinearLayout>
