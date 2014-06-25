@@ -398,6 +398,8 @@ public class BluetoothChatService {
             //store the cmd
             String str = new String();
             str="";
+            //for test 
+            int count=0;
             // Keep listening to the InputStream while connected
             while (true) {
                 try {
@@ -421,7 +423,7 @@ public class BluetoothChatService {
 //									Log.d("rx_fix", str);
 								} else {
 									ok=true;
-									Log.d("rx_fix", "stop");
+//									Log.d("rx_fix", "stop");
 								}
 							}
 						}
@@ -431,6 +433,11 @@ public class BluetoothChatService {
 						   // Send the obtained bytes to the UI Activity
 //	                    mHandler.obtainMessage(BluetoothChat.MESSAGE_READ, bytes, -1, buffer)
 						Log.d("rx_fix", str);
+						if(str.equals("hello world_12345678901"))
+						{
+							count++;
+							Log.d("rx_fix", "count: "+count);
+						}
 						//since the handleMessage() was change,so we just trans the final "str" to it
 	                     mHandler.obtainMessage(BluetoothChat.MESSAGE_READ, bytes, -1, str)
 	                            .sendToTarget();
