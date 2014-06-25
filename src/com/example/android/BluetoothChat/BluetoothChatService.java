@@ -392,17 +392,54 @@ public class BluetoothChatService {
 		public void run() {
             Log.i(TAG, "BEGIN mConnectedThread");
             byte[] buffer = new byte[1024];
-            int bytes;
-
+            int bytes=0;
+            //to identify if an cmd is over
+            boolean ok=false;
+            //store the cmd
+            String str = new String();
+            str="";
             // Keep listening to the InputStream while connected
             while (true) {
                 try {
-                    // Read from the InputStream
-                    bytes = mmInStream.read(buffer);
-
-                    // Send the obtained bytes to the UI Activity
-                    mHandler.obtainMessage(BluetoothChat.MESSAGE_READ, bytes, -1, buffer)
-                            .sendToTarget();
+                	//if cmd is not received over,then start to recv,if has data,then recv all,and iterater the buffer,if not find the end tag ,
+                	//then add the buffer data to str,if find the end tag,then change the ok to false ,which means cmd is recv over
+					if(!ok)
+					{
+						if(mmInStream.available()>0)
+						{
+							//debug code
+//							Log.d("rx_fix", "start");
+							
+							//get all the data available 
+							bytes = mmInStream.read(buffer); // ∂¡»Î ˝æ›
+//							Log.d("rx_fix", "bytes"+bytes);
+							//
+							for (int i = 0; i < bytes; i++) {
+								if ((buffer[i] != '\n') ) {
+									str+= (char)buffer[i];
+//									Log.d("rx_fix", "added: "+(char)buffer[i]);
+//									Log.d("rx_fix", str);
+								} else {
+									ok=true;
+									Log.d("rx_fix", "stop");
+								}
+							}
+						}
+					}
+					else
+					{
+						   // Send the obtained bytes to the UI Activity
+//	                    mHandler.obtainMessage(BluetoothChat.MESSAGE_READ, bytes, -1, buffer)
+						Log.d("rx_fix", str);
+						//since the handleMessage() was change,so we just trans the final "str" to it
+	                     mHandler.obtainMessage(BluetoothChat.MESSAGE_READ, bytes, -1, str)
+	                            .sendToTarget();
+	                     str="";
+	                    ok=false;
+	                    
+					}
+				
+                 
                 } catch (IOException e) {
                     Log.e(TAG, "disconnected", e);
                     connectionLost();
@@ -418,7 +455,8 @@ public class BluetoothChatService {
         public void write(byte[] buffer) {
             try {
                 mmOutStream.write(buffer);
-
+                //add an end tag
+                mmOutStream.write('\n');
                 // Share the sent message back to the UI Activity
                 mHandler.obtainMessage(BluetoothChat.MESSAGE_WRITE, -1, -1, buffer)
                         .sendToTarget();

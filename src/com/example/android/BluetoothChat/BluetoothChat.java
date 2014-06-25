@@ -263,9 +263,11 @@ public class BluetoothChat extends Activity {
                 mConversationArrayAdapter.add("Me:  " + writeMessage);
                 break;
             case MESSAGE_READ:
-                byte[] readBuf = (byte[]) msg.obj;
+            	//make some change
+//                byte[] readBuf = (byte[]) msg.obj;
                 // construct a string from the valid bytes in the buffer
-                String readMessage = new String(readBuf, 0, msg.arg1);
+//                String readMessage = new String(readBuf, 0, msg.arg1);
+            	String readMessage=(String) msg.obj;
                 mConversationArrayAdapter.add(mConnectedDeviceName+":  " + readMessage);
                 break;
             case MESSAGE_DEVICE_NAME:
