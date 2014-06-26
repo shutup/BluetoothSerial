@@ -17,7 +17,7 @@ HC05 btSerial = HC05(3, 2);  // cmd, state
 #endif
 boolean ok=false;
 String str;
-int MAX=5000;
+int MAX=3;
 void setup()
 {
   DEBUG_BEGIN(57600);

@@ -411,7 +411,7 @@ public class BluetoothChatService {
 						{
 							//debug code
 //							Log.d("rx_fix", "start");
-							
+							buffer=new byte[1024] ;
 							//get all the data available 
 							bytes = mmInStream.read(buffer); // ∂¡»Î ˝æ›
 //							Log.d("rx_fix", "bytes"+bytes);
@@ -432,18 +432,24 @@ public class BluetoothChatService {
 					{
 						   // Send the obtained bytes to the UI Activity
 //	                    mHandler.obtainMessage(BluetoothChat.MESSAGE_READ, bytes, -1, buffer)
-						Log.d("rx_fix", str);
-						if(str.equals("hello world_12345678901"))
-						{
+//						Log.d("rx_fix", str);
+						if(!str.equals("hello world_12345678901"))
+						{	
+							if(str!="")
+							{
+							Log.d("rx_fix", str);
 							count++;
 							Log.d("rx_fix", "count: "+count);
+							}
 						}
 						//since the handleMessage() was change,so we just trans the final "str" to it
+//						if(str!="")
+						{
 	                     mHandler.obtainMessage(BluetoothChat.MESSAGE_READ, bytes, -1, str)
 	                            .sendToTarget();
 	                     str="";
 	                    ok=false;
-	                    
+						}
 					}
 				
                  
