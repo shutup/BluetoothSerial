@@ -19,7 +19,10 @@ package com.example.android.BluetoothChat;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.reflect.Array;
 import java.util.UUID;
+
+import org.apache.http.util.ByteArrayBuffer;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -392,6 +395,7 @@ public class BluetoothChatService {
 		public void run() {
             Log.i(TAG, "BEGIN mConnectedThread");
             byte[] buffer = new byte[1024];
+            byte[] temp =new byte[1024];
             int bytes=0;
             //to identify if an cmd is over
             boolean ok=false;
@@ -422,6 +426,7 @@ public class BluetoothChatService {
 //									Log.d("rx_fix", "added: "+(char)buffer[i]);
 //									Log.d("rx_fix", str);
 								} else {
+									
 									ok=true;
 //									Log.d("rx_fix", "stop");
 								}
@@ -433,11 +438,11 @@ public class BluetoothChatService {
 						   // Send the obtained bytes to the UI Activity
 //	                    mHandler.obtainMessage(BluetoothChat.MESSAGE_READ, bytes, -1, buffer)
 //						Log.d("rx_fix", str);
-						if(!str.equals("hello world_12345678901"))
+						if(str.equals("hello world_12345678901"))
 						{	
-							if(str!="")
+							//if(str!="")
 							{
-							Log.d("rx_fix", str);
+							//Log.d("rx_fix", str);
 							count++;
 							Log.d("rx_fix", "count: "+count);
 							}

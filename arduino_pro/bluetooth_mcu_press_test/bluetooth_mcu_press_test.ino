@@ -17,7 +17,7 @@ HC05 btSerial = HC05(3, 2);  // cmd, state
 #endif
 boolean ok=false;
 String str;
-int MAX=3;
+unsigned int MAX=50000;
 void setup()
 {
   DEBUG_BEGIN(57600);
@@ -61,10 +61,11 @@ void loop()
 }
 void something()
 {
-  for(int i=0;i<MAX;i++)
+  for(unsigned int i=0;i<MAX;i++)
   {
-    btSerial.print("hello world_12345678901\n");
+    btSerial.print("hello world_12345678901");
+    btSerial.print('\n');
     //may be cause some wrong code
-    delay(40);
+    delay(50);
   }
 }
