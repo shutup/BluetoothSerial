@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.android.BluetoothChat;
+package com.example.android.BluetoothSerial;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -40,7 +40,7 @@ import android.util.Log;
  * incoming connections, a thread for connecting with a device, and a
  * thread for performing data transmissions when connected.
  */
-public class BluetoothChatService {
+public class BluetoothSerialService {
     // Debugging
     private static final String TAG = "BluetoothChatService";
     private static final boolean D = true;
@@ -71,7 +71,7 @@ public class BluetoothChatService {
      * @param context  The UI Activity Context
      * @param handler  A Handler to send messages back to the UI Activity
      */
-    public BluetoothChatService(Context context, Handler handler) {
+    public BluetoothSerialService(Context context, Handler handler) {
         mAdapter = BluetoothAdapter.getDefaultAdapter();
         mState = STATE_NONE;
         mHandler = handler;
@@ -86,7 +86,7 @@ public class BluetoothChatService {
         mState = state;
 
         // Give the new state to the Handler so the UI Activity can update
-        mHandler.obtainMessage(BluetoothChat.MESSAGE_STATE_CHANGE, state, -1).sendToTarget();
+        mHandler.obtainMessage(BluetoothSerial.MESSAGE_STATE_CHANGE, state, -1).sendToTarget();
     }
 
     /**
@@ -158,9 +158,9 @@ public class BluetoothChatService {
         mConnectedThread.start();
 
         // Send the name of the connected device back to the UI Activity
-        Message msg = mHandler.obtainMessage(BluetoothChat.MESSAGE_DEVICE_NAME);
+        Message msg = mHandler.obtainMessage(BluetoothSerial.MESSAGE_DEVICE_NAME);
         Bundle bundle = new Bundle();
-        bundle.putString(BluetoothChat.DEVICE_NAME, device.getName());
+        bundle.putString(BluetoothSerial.DEVICE_NAME, device.getName());
         msg.setData(bundle);
         mHandler.sendMessage(msg);
 
@@ -202,9 +202,9 @@ public class BluetoothChatService {
         setState(STATE_LISTEN);
 
         // Send a failure message back to the Activity
-        Message msg = mHandler.obtainMessage(BluetoothChat.MESSAGE_TOAST);
+        Message msg = mHandler.obtainMessage(BluetoothSerial.MESSAGE_TOAST);
         Bundle bundle = new Bundle();
-        bundle.putString(BluetoothChat.TOAST, "Unable to connect device");
+        bundle.putString(BluetoothSerial.TOAST, "Unable to connect device");
         msg.setData(bundle);
         mHandler.sendMessage(msg);
     }
@@ -216,9 +216,9 @@ public class BluetoothChatService {
         setState(STATE_LISTEN);
 
         // Send a failure message back to the Activity
-        Message msg = mHandler.obtainMessage(BluetoothChat.MESSAGE_TOAST);
+        Message msg = mHandler.obtainMessage(BluetoothSerial.MESSAGE_TOAST);
         Bundle bundle = new Bundle();
-        bundle.putString(BluetoothChat.TOAST, "Device connection was lost");
+        bundle.putString(BluetoothSerial.TOAST, "Device connection was lost");
         msg.setData(bundle);
         mHandler.sendMessage(msg);
     }
@@ -263,7 +263,7 @@ public class BluetoothChatService {
 
                 // If a connection was accepted
                 if (socket != null) {
-                    synchronized (BluetoothChatService.this) {
+                    synchronized (BluetoothSerialService.this) {
                         switch (mState) {
                         case STATE_LISTEN:
                         case STATE_CONNECTING:
@@ -342,12 +342,12 @@ public class BluetoothChatService {
                     Log.e(TAG, "unable to close() socket during connection failure", e2);
                 }
                 // Start the service over to restart listening mode
-                BluetoothChatService.this.start();
+                BluetoothSerialService.this.start();
                 return;
             }
 
             // Reset the ConnectThread because we're done
-            synchronized (BluetoothChatService.this) {
+            synchronized (BluetoothSerialService.this) {
                 mConnectThread = null;
             }
 
@@ -435,6 +435,8 @@ public class BluetoothChatService {
 					}
 					else
 					{
+                        //in this block we will do some thing,and i think if this thread is block ,then we will 
+                        //lost some data
 						   // Send the obtained bytes to the UI Activity
 //	                    mHandler.obtainMessage(BluetoothChat.MESSAGE_READ, bytes, -1, buffer)
 //						Log.d("rx_fix", str);
@@ -450,7 +452,7 @@ public class BluetoothChatService {
 						//since the handleMessage() was change,so we just trans the final "str" to it
 //						if(str!="")
 						{
-	                     mHandler.obtainMessage(BluetoothChat.MESSAGE_READ, bytes, -1, str)
+	                     mHandler.obtainMessage(BluetoothSerial.MESSAGE_READ, bytes, -1, str)
 	                            .sendToTarget();
 	                     str="";
 	                    ok=false;
@@ -476,7 +478,7 @@ public class BluetoothChatService {
                 //add an end tag
                 mmOutStream.write('\n');
                 // Share the sent message back to the UI Activity
-                mHandler.obtainMessage(BluetoothChat.MESSAGE_WRITE, -1, -1, buffer)
+                mHandler.obtainMessage(BluetoothSerial.MESSAGE_WRITE, -1, -1, buffer)
                         .sendToTarget();
             } catch (IOException e) {
                 Log.e(TAG, "Exception during write", e);

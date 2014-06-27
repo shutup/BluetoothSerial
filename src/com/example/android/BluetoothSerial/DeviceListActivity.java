@@ -14,9 +14,11 @@
  * limitations under the License.
  */
 
-package com.example.android.BluetoothChat;
+package com.example.android.BluetoothSerial;
 
 import java.util.Set;
+
+import com.example.android.BluetoothSerial.R;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;

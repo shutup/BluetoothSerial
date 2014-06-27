@@ -14,7 +14,9 @@
  * limitations under the License.
  */
 
-package com.example.android.BluetoothChat;
+package com.example.android.BluetoothSerial;
+
+import com.example.android.BluetoothSerial.R;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
@@ -29,7 +31,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
@@ -42,7 +43,7 @@ import android.widget.Toast;
 /**
  * This is the main Activity that displays the current chat session.
  */
-public class BluetoothChat extends Activity {
+public class BluetoothSerial extends Activity {
     // Debugging
     private static final String TAG = "BluetoothChat";
     private static final boolean D = true;
@@ -77,7 +78,7 @@ public class BluetoothChat extends Activity {
     // Local Bluetooth adapter
     private BluetoothAdapter mBluetoothAdapter = null;
     // Member object for the chat services
-    private BluetoothChatService mChatService = null;
+    private BluetoothSerialService mChatService = null;
 
 
     @Override
@@ -130,7 +131,7 @@ public class BluetoothChat extends Activity {
         // onResume() will be called when ACTION_REQUEST_ENABLE activity returns.
         if (mChatService != null) {
             // Only if the state is STATE_NONE, do we know that we haven't started already
-            if (mChatService.getState() == BluetoothChatService.STATE_NONE) {
+            if (mChatService.getState() == BluetoothSerialService.STATE_NONE) {
               // Start the Bluetooth chat services
               mChatService.start();
             }
@@ -161,7 +162,7 @@ public class BluetoothChat extends Activity {
         });
 
         // Initialize the BluetoothChatService to perform bluetooth connections
-        mChatService = new BluetoothChatService(this, mHandler);
+        mChatService = new BluetoothSerialService(this, mHandler);
 
         // Initialize the buffer for outgoing messages
         mOutStringBuffer = new StringBuffer("");
@@ -203,7 +204,7 @@ public class BluetoothChat extends Activity {
      */
     private void sendMessage(String message) {
         // Check that we're actually connected before trying anything
-        if (mChatService.getState() != BluetoothChatService.STATE_CONNECTED) {
+        if (mChatService.getState() != BluetoothSerialService.STATE_CONNECTED) {
             Toast.makeText(this, R.string.not_connected, Toast.LENGTH_SHORT).show();
             return;
         }
@@ -242,16 +243,16 @@ public class BluetoothChat extends Activity {
             case MESSAGE_STATE_CHANGE:
                 if(D) Log.i(TAG, "MESSAGE_STATE_CHANGE: " + msg.arg1);
                 switch (msg.arg1) {
-                case BluetoothChatService.STATE_CONNECTED:
+                case BluetoothSerialService.STATE_CONNECTED:
                     mTitle.setText(R.string.title_connected_to);
                     mTitle.append(mConnectedDeviceName);
                     mConversationArrayAdapter.clear();
                     break;
-                case BluetoothChatService.STATE_CONNECTING:
+                case BluetoothSerialService.STATE_CONNECTING:
                     mTitle.setText(R.string.title_connecting);
                     break;
-                case BluetoothChatService.STATE_LISTEN:
-                case BluetoothChatService.STATE_NONE:
+                case BluetoothSerialService.STATE_LISTEN:
+                case BluetoothSerialService.STATE_NONE:
                     mTitle.setText(R.string.title_not_connected);
                     break;
                 }
